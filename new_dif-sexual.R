@@ -1,7 +1,5 @@
 #GENEPLAST - DIFERENCIAÇÃO SEXUAL
 
-#GENEPLAST - DIFERENCIAÇÃO SEXUAL
-
 # ============ INSTALAÇÃO DO ANNOTATIONHUB (APENAS 1ª VEZ) ===========
 
 #install.packages("AnnotationHub")
@@ -18,9 +16,23 @@
 
 #BiocManager::install("geneplast.data")
 
+# Orientações do README
+
+install.packages("knitr")
+install.packages("rmarkdown")
+install.packages("BiocManager")
+BiocManager::install("BiocStyle")
+
+install.packages("remotes")
+remotes::install_github("sysbiolab/GeneBridge", build_vignettes=TRUE)
+
 # ==========================================================
 # BIBLIOTECAS ESSENCIAIS
-library(geneplast.data)
+
+#library(geneplast.data)
+
+library(GeneBridge)
+#vignette("GeneBridge")
 library(tibble)
 library(stringi)
 library(AnnotationHub)
