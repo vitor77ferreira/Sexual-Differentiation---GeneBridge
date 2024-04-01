@@ -1,9 +1,33 @@
 #GENEPLAST - DIFERENCIAÇÃO SEXUAL
 
-library(geneplast)
+#GENEPLAST - DIFERENCIAÇÃO SEXUAL
+
+# ============ INSTALAÇÃO DO ANNOTATIONHUB (APENAS 1ª VEZ) ===========
+
+#install.packages("AnnotationHub")
+
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+
+# BiocManager::install("AnnotationHub")
+
+# ============ INSTALAÇÃO DO GENEPLAST/GENEBRIDGE (APENAS 1ª VEZ) ===========
+
+#if (!require("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+
+#BiocManager::install("geneplast.data")
+
+# ==========================================================
+# BIBLIOTECAS ESSENCIAIS
+library(geneplast.data)
+library(tibble)
+library(stringi)
 library(AnnotationHub)
-library(vroom)
 library(dplyr)
+
+# ===== CUSTOMIZÁVEIS =====
+library(vroom)
 library(igraph)
 library(ggraph)
 library(purrr)
@@ -12,6 +36,10 @@ library(here)
 
 # ================= CITAÇÕES =================
 # citation("pkgname") para citar cada pacote utilizado ao final do TCC
+
+# =============== CITAÇÃO DO GENEPLAST==============
+
+# Dalmolin RJS, Castro MAA. Geneplast: evolutionary rooting and plasticity inference. R package, 2015.
 # ============================================
 
 set.seed(1024)
@@ -149,10 +177,10 @@ string_id <- RCurl::postForm("https://string-db.org/api/json/get_string_ids",
 ## Get geneplast databases
 
 ah <- AnnotationHub()
-
 meta <- query(ah, "geneplast")
+head(meta)
 
-# Chave identificadora STRING database v11.0
+# Carregue os objetos na sessão usando o ID do conjunto de dados escolhido do STRING database v11.0
 load(meta[["AH83116"]])
 
 # Takes a lot of RAM to do:
@@ -164,6 +192,15 @@ cogs_of_interest <- cogdata %>%
   left_join(string_id, by = c("protein_id" = "string_id"))
 
 gc()
+
+# ================ ERRO NESSE PONTO  ================
+#-Preprocessing input data...
+#Erro: objeto 'cogs_of_interest' não encontrado
+#> ogr <- groot(ogr, nPermutations = 1000, verbose = FALSE)
+#Error in h(simpleError(msg, call)) : 
+#  erro na avaliação do argumento 'object' na seleção do método para a função 'groot': 'objeto 'ogr' não encontrado'
+
+# =======================================
 
 ogr <-
   groot.preprocess(
@@ -190,6 +227,12 @@ groot_df <- res %>%
   left_join(lca_names) %>%
   left_join(cogs_of_interest)
 
+# -=================
+
+# SALVAR O ARQUIVO PRA CONSULTA POSTERIOR
+write.csv(groot_df, file = "~/UFRN - BIOMEDICINA/TCC/genes/groot_df.csv", row.names = FALSE)
+
+View(groot_df)
 # -=================
 
 # EXEMPLO: ÁRVORE PARA A KISSPEPTINA
