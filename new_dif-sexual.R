@@ -18,21 +18,22 @@
 
 # Orientações do README
 
-install.packages("knitr")
-install.packages("rmarkdown")
-install.packages("BiocManager")
-BiocManager::install("BiocStyle")
+#install.packages("knitr")
+#install.packages("rmarkdown")
+#install.packages("BiocManager")
+#BiocManager::install("BiocStyle")
 
-install.packages("remotes")
-remotes::install_github("sysbiolab/GeneBridge", build_vignettes=TRUE)
+#install.packages("remotes")
+#remotes::install_github("sysbiolab/GeneBridge", build_vignettes=TRUE)
 
 # ==========================================================
 # BIBLIOTECAS ESSENCIAIS
 
 #library(geneplast.data)
 
+
 library(GeneBridge)
-#vignette("GeneBridge")
+vignette("GeneBridge")
 library(tibble)
 library(stringi)
 library(AnnotationHub)
@@ -46,6 +47,8 @@ library(purrr)
 library(tidyr)
 library(here)
 
+# ===== Informações sobre ortólogos =====
+data("ogdata")
 # ================= CITAÇÕES =================
 # citation("pkgname") para citar cada pacote utilizado ao final do TCC
 
@@ -89,7 +92,7 @@ genes_interesse <- read.csv("./genes/genes.csv")
 genes_interesse <- genes_interesse %>%
   distinct()
 
-# 327: PÓS RETIRADA DE DUPLICAÇÕES
+# 331: PÓS RETIRADA DE DUPLICAÇÕES
 
 # Salvar a tabela com os dados após a remoção dos termos duplicados
 write.csv(genes_interesse, file = "./genes/genes_sem_duplicatas.csv", row.names = FALSE)
