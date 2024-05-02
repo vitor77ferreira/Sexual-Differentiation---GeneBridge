@@ -30,7 +30,7 @@
 # BIBLIOTECAS ESSENCIAIS
 
 #library(geneplast.data)
-
+#install.packages(c("curl", "httr"))
 
 library(GeneBridge)
 vignette("GeneBridge")
@@ -167,11 +167,14 @@ gene <- genes_interesse
 
 # gene <- c("FGFR3", "ALDH1L1", "S100B")
 
+#  ======== !!!! Só funciona no linux !!!! ========
+
 string_id <- get_string_ids(gene) %>%
   janitor::clean_names() %>%
   tidyr::separate(string_id,
                   into = c("ssp_id", "string_id"),
                   sep = "\\.")
+# =============================================
 
 # Construindo ids_collapsed
 ids_collapsed <- paste0(gene, collapse = "%0d")
@@ -218,16 +221,20 @@ gc()
 # =======================================
 
 ogr <-
-  groot.preprocess(
-    cogdata = cogdata,
+  newBridge(
+    ogdata = cogdata,
     phyloTree = phyloTree,
-    cogids = cogs_of_interest$cog,
-    spid = "9606"
+    ogids = cogs_of_interest$cog_id,
+    refsp = "9606"
   )
 
-ogr <- groot(ogr, nPermutations = 1000, verbose = FALSE)
+ogr <- runBridge(ogr, threshold = 0.3)
+                 
+                 
+                 nPermutations = 1000, verbose = FALSE)
+ogr <- runPermutation(ogr, nPermutations = 1000)
 
-res <- groot.get(ogr, what = "results")
+res <- getBridge(ogr, what = "results")
 
 ## Nomeando os clados enraizados e obtendo a tabela de resultados finais
 
@@ -256,7 +263,7 @@ View(groot_df)
 # -=================
 
 ##### Network assembly ----------
-
+#  ======== !!!! Só funciona no linux !!!! ========
 network <- get_string_network(string_id$string_id)
 
 network_separated <-  network %>%
